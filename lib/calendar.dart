@@ -126,6 +126,18 @@ class _CalendarState extends State<Calendar> {
                 onPressed: () => Navigator.pop(context),
               ),
               TextButton(
+                child: const Text("Clear Tasks"),
+                onPressed: () {
+                  if (selectedEvents[selectedDay] != null) {
+                    selectedEvents[selectedDay]!.clear();
+                  } 
+                  Navigator.pop(context);
+                  _eventController.clear();
+                  setState((){});
+                  return;
+                },
+              ),
+              TextButton(
                 child: Text("Add"),
                 onPressed: () {
                   if (_eventController.text.isEmpty) {
@@ -151,7 +163,7 @@ class _CalendarState extends State<Calendar> {
             ],
           ),
         ),
-        label: Text("Add Task"),
+        label: Text("Manage Tasks"),
         icon: Icon(Icons.add),
       ),
     );
