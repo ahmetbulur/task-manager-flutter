@@ -1,6 +1,8 @@
 # task_manager
 
-A new Flutter project.
+A simple to-do list app with calendar
+
+Reference: https://pub.dev/packages/table_calendar
 
 ## Getting Started
 
