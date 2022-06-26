@@ -25,6 +25,15 @@ class _CalendarState extends State<Calendar> {
     return selectedEvents[date] ?? [];
   }
 
+  TextStyle? _getTextStyle(bool checked) {
+    if (!checked) return null;
+
+    return TextStyle(
+      color: Colors.grey,
+      decoration: TextDecoration.lineThrough,
+    );
+  }
+
   @override
   void dispose() {
     _eventController.dispose();
@@ -105,8 +114,13 @@ class _CalendarState extends State<Calendar> {
           ),
           ..._getEventsfromDay(selectedDay).map(
             (Event event) => ListTile(
+              onTap: () {
+                event.checked = !event.checked;
+                setState(() {});
+              },
               title: Text(
                 event.title,
+                style: _getTextStyle(event.checked),
               ),
             ),
           ),
@@ -116,7 +130,7 @@ class _CalendarState extends State<Calendar> {
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Add Task"),
+            title: Text("Manage Tasks"),
             content: TextFormField(
               controller: _eventController,
             ),
@@ -126,11 +140,13 @@ class _CalendarState extends State<Calendar> {
                 onPressed: () => Navigator.pop(context),
               ),
               TextButton(
-                child: const Text("Clear Tasks"),
+                child: Text("Clear Done Tasks"),
                 onPressed: () {
+                  
                   if (selectedEvents[selectedDay] != null) {
-                    selectedEvents[selectedDay]!.clear();
+                    selectedEvents[selectedDay]?.removeWhere((item) => item.checked == true);
                   } 
+
                   Navigator.pop(context);
                   _eventController.clear();
                   setState((){});
@@ -138,18 +154,17 @@ class _CalendarState extends State<Calendar> {
                 },
               ),
               TextButton(
-                child: Text("Add"),
+                child: Text("Add Task"),
                 onPressed: () {
-                  if (_eventController.text.isEmpty) {
-
-                  } else {
+                   
+                  if (_eventController.text.isNotEmpty) {
                     if (selectedEvents[selectedDay] != null) {
                       selectedEvents[selectedDay]?.add(
-                        Event(title: _eventController.text),
+                        Event(title: _eventController.text, checked: false),
                       );
                     } else {
                       selectedEvents[selectedDay] = [
-                        Event(title: _eventController.text)
+                        Event(title: _eventController.text, checked: false)
                       ];
                     }
 

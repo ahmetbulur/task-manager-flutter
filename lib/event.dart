@@ -1,6 +1,7 @@
 class Event {
   
   final String title;
-  Event({required this.title});
+  bool checked;
+  Event({required this.title, required this.checked});
   
 }
